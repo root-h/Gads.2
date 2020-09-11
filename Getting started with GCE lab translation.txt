@@ -1,0 +1,70 @@
+#Task-Google cloud fundamentals :Getting started with compute engine
+
+##objectives
+>Create a compute engine VM using the Google Cloud Platform console 
+>Create a compute engine virtual machine using the glcoud command line CLI interface
+>Connect the two instances.
+
+
+#1
+create a compute engine virtual machine using the GCP console
+
+gcloud compute intances create hana-vm-1 --tags http
+gcloud compute firewall-rules create default-allow-http --action=ALLOW --destination=INGRESS --rules=httpp:80 --target-tags=http
+
+#2
+Create a compute engine vm using the gcloud CLI 
+
+gcloud config set compute/zone us-central1-a
+gcloud compute instances create hana-vm-2  
+
+#3
+Connect the two instances using the ping command to allow the second vm instance my-vm-2 to reach my-vm-1 over a network
+
+gcloud compute ssh hana-vm-2
+
+-> ping hana-vm-1 from hana-vm-2
+
+ping -c 4 hana-vm-1
+
+->Using the ssh command open a cmd prompt to hana-vm-1 from hana-vm-2
+
+ssh hana-vm-1
+
+->Now, install Nginx web server
+
+sudo apt-get install nginx-light -y
+
+->Using the nano text editor add a custom message to the home page of the web server
+
+sudo nano /var/www/html/index.nginx-debian.html
+
+->Below the h1 header Add text like this, and replace MY_COLOR with your favorite color
+
+Hi from Purple
+
+->press Ctrl+O then ENTER to save the changes made and Ctrl+X to exit nano editor
+
+->Confirm that the web server is at the new page. At the cmd prompt on hana-vm-1,type the command below to view changes.
+
+
+curl http://localhost/
+
+
+-> To exit the session in hana-vm-1 type
+
+exit
+
+->To confirm that hana-vm-2 can reach the web server on hana-vm-1, at the cmd prompt on hana-vm-2,execute the command
+
+curl http://hana-vm-1/
+
+->It directs you to the HTML source of the web server's home page, including changes made to lines of code.
+
+->To get the external IP of the hana-vm-1 instance type the cmd
+
+gcloud compute instances list --zone us-central1-a
+
+->Copy it in an external text editor and paste it into a new browser tab and load the page
+
+->It displays the web server home page,including the custom text.
