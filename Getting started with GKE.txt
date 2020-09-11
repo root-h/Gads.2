@@ -1,0 +1,81 @@
+#Task -Getting started with Google Kubernetes engine GKE
+
+#Objectives
+->1.Confirm that needed APIs are enabled
+->2.Start a Kubernetes Engine cluster
+->3.Run and deploy a container
+
+#1
+->In this case we need the Kubernetes Engine API and the Container Registry API
+
+->Enter the followinf to show the IDS for your GCloud projects in cloud shell
+
+gcloud projects list
+
+->Set the default project using the cmd below to the project ID to be used in your lab to which you'll enable APIs
+
+gcloud config set project YOUR_PROJECT_ID
+
+gcloud services list --available  //displays the list of serices available and APIs enabled
+
+->If your API is not included in the list enter the cmd below to enable it
+
+gcloud services enable SERVICE_NAME
+
+e.g gcloud services enable Kubernetes Engine API
+
+
+#2
+->For ease of use place the zone assigned to you in your lab into an environment variable at the cloud shell prompt
+
+e.g export MY_ZONE=us-central1-a   //if your zone in us central1-a
+ 
+OR set your default compute zone  replacing compute-zone with a zone such as us-west1-a
+
+gcloud config set compute/zone compute-zone
+
+->To start the Kubernetes cluster managed by the Kubernetes engine replace cluster-name with the name of your cluster and configure it to run the number of nodes you require indicating the number after nodes=
+
+gcloud container clusters create cluster-name --zone $MY_ZONE --num-nodes=
+ 
+->Check your installed version of Kubernetes using the command below
+
+kubectl version
+
+->Get aunthetication credentials for the cluster to interact with it 
+
+gcloud container clusters get-credentials cluster-name
+
+
+#3
+->From the cloud shell prompt launch a single instance of the nginx(a popular web server) using the command below
+
+kubectl create deploy nginx --image=nginx:1.17.10  //--image specifies a container image to deploy 1.17.10 indicates the specific image version to pull else the latest version is used.
+
+->To view or inspect the pod running the nginx container type
+
+kubectl get pods
+
+->Expose the nginx container to the internet using the command below
+
+kubectl expose deployment nginx --port 80 --type LoadBalancer   //the IP address attached to the service and load balancer created remains the same for the life of the the service and can be used to contact the nginx container remotely
+
+->To view the new service type
+
+kubectl get services  //re-run the kubectl command every few seconds to populate your external IP address if it reads pending
+
+->To scale up the number of pods running on your service type for an app that's becoming popular 
+
+kubectl scale deployment nginx --replicas 3 
+
+->To confirm the number of pods are updated type 
+
+kubectl get pods
+
+->Confirm your external IP address hasn't changed by typing 
+
+kubectl get services  //return to the web browser tab used to view the external IP address and refresh it to confirm the nginx container is still responding 
+
+
+
+--TASK ENDS--
