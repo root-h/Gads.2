@@ -19,7 +19,7 @@ gcloud config set compute/zone us-central1-a
 gcloud compute instances create hana-vm-2  
 
 #3
-Connect the two instances using the ping command to allow the second vm instance my-vm-2 to reach my-vm-1 over a network
+Connect the two instances using the ping command to allow the second vm instance my-vm-2 to reach hana-vm-1 over a network
 
 gcloud compute ssh hana-vm-2
 
